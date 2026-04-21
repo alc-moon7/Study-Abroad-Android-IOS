@@ -4,8 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'motion.dart';
-
 class AssistantIntroScreen extends StatefulWidget {
   const AssistantIntroScreen({super.key});
 
@@ -16,7 +14,6 @@ class AssistantIntroScreen extends StatefulWidget {
 class _AssistantIntroScreenState extends State<AssistantIntroScreen>
     with TickerProviderStateMixin {
   late final AnimationController _bubbleController;
-  late final AnimationController _foxFloatController;
   late final AnimationController _entryController;
 
   final List<_ChoiceChipData> _choices = const [
@@ -38,10 +35,6 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
-    _foxFloatController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 3200),
-    );
     _runEntrance();
   }
 
@@ -52,7 +45,6 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
         return;
       }
 
-      _foxFloatController.repeat(reverse: true);
       await _bubbleController.forward();
     } on TickerCanceled {
       // Animation was disposed while a sequence step was in flight.
@@ -63,7 +55,6 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
   void dispose() {
     _entryController.dispose();
     _bubbleController.dispose();
-    _foxFloatController.dispose();
     super.dispose();
   }
 
@@ -152,7 +143,6 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
                               animation: Listenable.merge([
                                 _entryController,
                                 _bubbleController,
-                                _foxFloatController,
                               ]),
                               builder: (context, child) {
                                 final entry = Curves.easeOutCubic.transform(
@@ -161,11 +151,6 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
                                 final bubble = Curves.easeOutBack.transform(
                                   _bubbleController.value,
                                 );
-                                final foxFloat = math.sin(
-                                        _foxFloatController.value *
-                                            math.pi *
-                                            2) *
-                                    8;
 
                                 return Opacity(
                                   opacity: entry,
@@ -185,11 +170,8 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
                                               Positioned(
                                                 left: 0,
                                                 bottom: 0,
-                                                child: Transform.translate(
-                                                  offset: Offset(0, foxFloat),
-                                                  child: FoxAssistantAvatar(
-                                                    size: foxSize,
-                                                  ),
+                                                child: _StaticFoxAvatar(
+                                                  size: foxSize,
                                                 ),
                                               ),
                                               Positioned(
@@ -268,6 +250,25 @@ class _AssistantIntroScreenState extends State<AssistantIntroScreen>
           ),
         ),
       ),
+    );
+  }
+}
+
+class _StaticFoxAvatar extends StatelessWidget {
+  const _StaticFoxAvatar({
+    required this.size,
+  });
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/icon/fox_full_character.png',
+      width: size * 0.9,
+      height: size,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.high,
     );
   }
 }
