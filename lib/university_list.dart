@@ -122,7 +122,7 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
                               Positioned(
                                 left: 0,
                                 right: 0,
-                                bottom: 20,
+                                bottom: 60,
                                 child: _SearchField(
                                   controller: _searchController,
                                 ),
@@ -132,18 +132,18 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
                         ),
                       ),
                       const Positioned(
-                        top: 204,
+                        top: 170,
                         left: 0,
                         right: 0,
                         child: _FilterRow(),
                       ),
                       Positioned(
-                        top: 264,
+                        top: 224,
                         left: 0,
                         right: 0,
-                        bottom: 108,
+                        bottom: 0,
                         child: ListView(
-                          padding: EdgeInsets.zero,
+                          padding: const EdgeInsets.only(bottom: 104),
                           children: [
                             ..._universities.map(
                               (university) => Padding(
@@ -256,8 +256,8 @@ class _HeroSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final titleSize = (width * 0.094).clamp(25.5, 35.0).toDouble();
-        final subtitleSize = (width * 0.043).clamp(12.6, 16.0).toDouble();
+        final titleSize = (width * 0.085).clamp(28.0, 38.0).toDouble();
+        final subtitleSize = (width * 0.035).clamp(14.0, 18.0).toDouble();
 
         return SizedBox(
           height: 164,
@@ -322,11 +322,12 @@ class _SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.98),
-        borderRadius: BorderRadius.circular(21),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -337,28 +338,42 @@ class _SearchField extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.search_rounded,
-            color: Color(0xFF303030),
-            size: 28,
+          const Center(
+            child: Icon(
+              Icons.search_rounded,
+              color: Color(0xFF303030),
+              size: 22,
+            ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
-            child: TextField(
-              controller: controller,
-              cursorColor: const Color(0xFF8E8067),
-              style: const TextStyle(
-                color: Color(0xFF37332E),
-                fontSize: 14.4,
-                fontWeight: FontWeight.w500,
-              ),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Search university, course or country...',
-                hintStyle: TextStyle(
-                  color: Color(0xFF7F7A72),
-                  fontSize: 14.4,
-                  fontWeight: FontWeight.w500,
+            child: SizedBox(
+              height: double.infinity,
+              child: Center(
+                child: TextField(
+                  controller: controller,
+                  maxLines: 1,
+                  textAlignVertical: TextAlignVertical.center,
+                  cursorColor: const Color(0xFF8E8067),
+                  style: const TextStyle(
+                    color: Color(0xFF37332E),
+                    fontSize: 13.6,
+                    fontWeight: FontWeight.w500,
+                    height: 1.0,
+                  ),
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    isCollapsed: true,
+                    contentPadding: EdgeInsets.zero,
+                    border: InputBorder.none,
+                    hintText: 'Search university, course or country...',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7F7A72),
+                      fontSize: 13.6,
+                      fontWeight: FontWeight.w500,
+                      height: 1.0,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -390,17 +405,13 @@ class _FilterRow extends StatelessWidget {
         label: 'Programs',
         trailingIcon: Icons.keyboard_arrow_down_rounded,
       ),
-      _FilterData(
-        icon: Icons.filter_alt_outlined,
-        label: 'More Filters',
-      ),
     ];
 
     return LayoutBuilder(
       builder: (context, constraints) {
         const spacing = 10.0;
         final chipWidth =
-            ((constraints.maxWidth - spacing * 3) / 4).clamp(74.0, 118.0);
+            ((constraints.maxWidth - spacing * 2) / 3).clamp(96.0, 156.0);
 
         return Wrap(
           spacing: spacing,
@@ -427,11 +438,11 @@ class _FilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 44,
+      padding: const EdgeInsets.only(left: 8, right: 6),
       decoration: BoxDecoration(
         color: const Color(0xFFFFEDB8).withOpacity(0.9),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: Colors.white.withOpacity(0.36),
         ),
@@ -440,29 +451,29 @@ class _FilterChip extends StatelessWidget {
         children: [
           Icon(
             data.icon,
-            size: 21,
+            size: 16,
             color: const Color(0xFF2B2B2B),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                data.label,
-                style: const TextStyle(
-                  color: Color(0xFF292826),
-                  fontSize: 13.4,
-                  fontWeight: FontWeight.w600,
-                ),
+            child: Text(
+              data.label,
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Color(0xFF292826),
+                fontSize: 12.2,
+                fontWeight: FontWeight.w600,
+                height: 1.0,
               ),
             ),
           ),
           if (data.trailingIcon != null) ...[
-            const SizedBox(width: 2),
+            const SizedBox(width: 0.5),
             Icon(
               data.trailingIcon,
-              size: 19,
+              size: 16,
               color: const Color(0xFF2B2B2B),
             ),
           ],
@@ -486,30 +497,35 @@ class _UniversityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+      padding: const EdgeInsets.fromLTRB(9, 5, 9, 5),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.985),
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF7A3F00).withOpacity(0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
+          final compact = constraints.maxWidth < 350;
           final logoWidth =
-              (constraints.maxWidth * 0.23).clamp(70.0, 84.0).toDouble();
+              (constraints.maxWidth * 0.21).clamp(72.0, 82.0).toDouble();
           final statsWidth =
-              (constraints.maxWidth * 0.285).clamp(88.0, 102.0).toDouble();
-          final infoWidth = constraints.maxWidth - logoWidth - statsWidth - 33;
-          final titleSize = data.name.length > 28 ? 14.0 : 15.8;
-          final bodySize = infoWidth < 112 ? 11.8 : 12.6;
+              (constraints.maxWidth * 0.275).clamp(92.0, 108.0).toDouble();
+          final availableInfoWidth =
+              constraints.maxWidth - logoWidth - statsWidth - 27;
+          final titleSize =
+              data.name.length > 26
+                  ? (compact ? 13.2 : 13.8)
+                  : (compact ? 14.4 : 15.4);
+          final bodySize = availableInfoWidth < 118 ? 11.2 : 11.8;
 
           return SizedBox(
-            height: 146,
+            height: 126,
             child: Row(
               children: [
                 SizedBox(
@@ -518,10 +534,10 @@ class _UniversityCard extends StatelessWidget {
                 ),
                 Container(
                   width: 1,
-                  margin: const EdgeInsets.symmetric(vertical: 6),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   color: const Color(0xFFF1E8DC),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 12),
                 Expanded(
                   child: _UniversityInfo(
                     data: data,
@@ -529,7 +545,7 @@ class _UniversityCard extends StatelessWidget {
                     bodySize: bodySize,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 SizedBox(
                   width: statsWidth,
                   child: _UniversityStats(
@@ -562,6 +578,7 @@ class _UniversityInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           data.name,
@@ -571,17 +588,17 @@ class _UniversityInfo extends StatelessWidget {
             color: const Color(0xFF24212A),
             fontSize: titleSize,
             fontWeight: FontWeight.w800,
-            height: 1.02,
-            letterSpacing: -0.3,
+            height: 0.98,
+            letterSpacing: -0.35,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         Text.rich(
           TextSpan(
             children: [
               TextSpan(
-                text: '${data.countryFlag}  ',
-                style: TextStyle(fontSize: bodySize + 1.2),
+                text: '${data.countryFlag} ',
+                style: TextStyle(fontSize: bodySize + 0.8),
               ),
               TextSpan(
                 text: data.location,
@@ -589,6 +606,7 @@ class _UniversityInfo extends StatelessWidget {
                   color: const Color(0xFF87807B),
                   fontSize: bodySize,
                   fontWeight: FontWeight.w500,
+                  height: 1.0,
                 ),
               ),
             ],
@@ -596,24 +614,24 @@ class _UniversityInfo extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Row(
           children: [
-            const Icon(
+            Icon(
               Icons.star_rounded,
-              color: Color(0xFFFFB400),
-              size: 24,
+              color: const Color(0xFFFFB400),
+              size: bodySize + 6.4,
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 3),
             Text(
               data.rating,
               style: TextStyle(
                 color: const Color(0xFF292736),
-                fontSize: bodySize + 1.2,
+                fontSize: bodySize + 0.8,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 4),
             Expanded(
               child: Text(
                 '(${data.reviews})',
@@ -623,14 +641,15 @@ class _UniversityInfo extends StatelessWidget {
                   color: const Color(0xFF4E4A57),
                   fontSize: bodySize,
                   fontWeight: FontWeight.w500,
+                  height: 1.0,
                 ),
               ),
             ),
           ],
         ),
-        const Spacer(),
+        const SizedBox(height: 2),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
           decoration: BoxDecoration(
             color: const Color(0xFFFBE8C1),
             borderRadius: BorderRadius.circular(999),
@@ -641,8 +660,9 @@ class _UniversityInfo extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: const Color(0xFF7A591A),
-              fontSize: bodySize - 0.2,
+              fontSize: bodySize - 0.4,
               fontWeight: FontWeight.w600,
+              height: 1.0,
             ),
           ),
         ),
@@ -669,15 +689,15 @@ class _UniversityStats extends StatelessWidget {
         final compact = constraints.maxWidth < 96;
         final labelStyle = TextStyle(
           color: const Color(0xFF908681),
-          fontSize: compact ? 11.2 : 12.0,
+          fontSize: compact ? 10.6 : 11.2,
           fontWeight: FontWeight.w500,
-          height: 1.1,
+          height: 1.0,
         );
         final valueStyle = TextStyle(
           color: const Color(0xFF28242F),
-          fontSize: compact ? 12.0 : 12.8,
+          fontSize: compact ? 11.8 : 12.8,
           fontWeight: FontWeight.w700,
-          height: 1.16,
+          height: 1.08,
         );
 
         return Column(
@@ -691,8 +711,8 @@ class _UniversityStats extends StatelessWidget {
                   onTap: onShortlistTap,
                   customBorder: const CircleBorder(),
                   child: Container(
-                    width: compact ? 40 : 44,
-                    height: compact ? 40 : 44,
+                    width: compact ? 34 : 38,
+                    height: compact ? 34 : 38,
                     decoration: BoxDecoration(
                       color: shortlisted
                           ? const Color(0xFFFFF2F0)
@@ -709,20 +729,20 @@ class _UniversityStats extends StatelessWidget {
                       color: shortlisted
                           ? const Color(0xFFFF6B61)
                           : const Color(0xFF262626),
-                      size: compact ? 20 : 22,
+                      size: compact ? 17 : 19,
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: compact ? 6 : 8),
+            SizedBox(height: compact ? 5 : 6),
             Text(
               'Tuition Fees',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: labelStyle,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text.rich(
               TextSpan(
                 children: [
@@ -731,8 +751,9 @@ class _UniversityStats extends StatelessWidget {
                     text: ' / year',
                     style: TextStyle(
                       color: const Color(0xFF6F6761),
-                      fontSize: compact ? 11.0 : 12.0,
+                      fontSize: compact ? 10.2 : 11.0,
                       fontWeight: FontWeight.w500,
+                      height: 1.0,
                     ),
                   ),
                 ],
@@ -740,14 +761,14 @@ class _UniversityStats extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const Spacer(),
+            SizedBox(height: compact ? 10 : 12),
             Text(
               'Intake',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: labelStyle,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
               data.intake,
               maxLines: 2,
@@ -1003,30 +1024,34 @@ class _AdviceCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 360;
+        final iconSize = compact ? 44.0 : 52.0;
+        final buttonHorizontal = compact ? 12.0 : 18.0;
+        final buttonVertical = compact ? 9.0 : 11.0;
 
         return Container(
           padding: EdgeInsets.fromLTRB(
-            compact ? 14 : 16,
-            16,
-            compact ? 14 : 16,
-            16,
+            compact ? 14 : 18,
+            compact ? 12 : 14,
+            compact ? 14 : 18,
+            compact ? 12 : 14,
           ),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.92),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(22),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
-                blurRadius: 16,
-                offset: const Offset(0, 7),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: compact ? 56 : 62,
-                height: compact ? 56 : 62,
+                width: iconSize,
+                height: iconSize,
                 decoration: const BoxDecoration(
                   color: Color(0xFFFFF0CB),
                   shape: BoxShape.circle,
@@ -1034,31 +1059,38 @@ class _AdviceCard extends StatelessWidget {
                 child: const Icon(
                   Icons.workspace_premium_rounded,
                   color: Color(0xFFF5B018),
-                  size: 32,
+                  size: 29,
                 ),
               ),
-              SizedBox(width: compact ? 10 : 14),
+              SizedBox(width: compact ? 12 : 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Need help choosing the right university?',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: const Color(0xFF201C19),
-                        fontSize: compact ? 13.8 : 15.2,
+                        fontSize: compact ? 11.8 : 13.0,
                         fontWeight: FontWeight.w700,
-                        letterSpacing: -0.2,
+                        letterSpacing: -0.15,
+                        height: 1.08,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       'Get personalized recommendations\nfrom our experts.',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: const Color(0xFF5B5550),
-                        fontSize: compact ? 12.2 : 13.4,
+                        fontSize: compact ? 10.4 : 11.2,
                         fontWeight: FontWeight.w500,
-                        height: 1.2,
+                        height: 1.1,
                       ),
                     ),
                   ],
@@ -1067,19 +1099,20 @@ class _AdviceCard extends StatelessWidget {
               SizedBox(width: compact ? 10 : 12),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: compact ? 14 : 18,
-                  vertical: compact ? 12 : 14,
+                  horizontal: buttonHorizontal,
+                  vertical: buttonVertical,
                 ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFF8804),
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   'Get Free Advice',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: compact ? 13.0 : 14.2,
+                    fontSize: compact ? 11.2 : 12.4,
                     fontWeight: FontWeight.w700,
+                    height: 1.0,
                   ),
                 ),
               ),
@@ -1097,43 +1130,46 @@ class _BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+      height: 78,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.985),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        color: const Color(0xFF8B4300).withOpacity(0.94),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _BottomBarItem(
-            icon: Icons.home_outlined,
-            label: 'Home',
+          Expanded(
+            child: _BottomBarItem(
+              icon: Icons.home_outlined,
+              label: 'Home',
+            ),
           ),
-          _BottomBarItem(
-            icon: Icons.school_rounded,
-            label: 'Universities',
-            active: true,
+          Expanded(
+            child: _BottomBarItem(
+              icon: Icons.school_rounded,
+              label: 'Universities',
+              active: true,
+            ),
           ),
-          _BottomBarItem(
-            icon: Icons.favorite_border_rounded,
-            label: 'Shortlist',
-            badgeText: '3',
+          Expanded(
+            child: _BottomBarItem(
+              icon: Icons.favorite_border_rounded,
+              label: 'Shortlist',
+              badgeText: '3',
+            ),
           ),
-          _BottomBarItem(
-            icon: Icons.description_outlined,
-            label: 'Applications',
+          Expanded(
+            child: _BottomBarItem(
+              icon: Icons.groups_rounded,
+              label: 'Community',
+            ),
           ),
-          _BottomBarItem(
-            icon: Icons.person_outline_rounded,
-            label: 'Profile',
+          Expanded(
+            child: _BottomBarItem(
+              icon: Icons.person_outline_rounded,
+              label: 'Profile',
+            ),
           ),
         ],
       ),
@@ -1157,12 +1193,12 @@ class _BottomBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconColor =
-        active ? const Color(0xFFFF8A1E) : const Color(0xFF5B5751);
+        active ? const Color(0xFFFFD27A) : Colors.white.withOpacity(0.86);
     final textColor =
-        active ? const Color(0xFFFF8A1E) : const Color(0xFF4E4A45);
+        active ? const Color(0xFFFFE3A5) : Colors.white.withOpacity(0.88);
 
-    return SizedBox(
-      width: 62,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -1171,16 +1207,16 @@ class _BottomBarItem extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 29,
+                size: 24,
                 color: iconColor,
               ),
               if (badgeText != null)
                 Positioned(
-                  right: -9,
-                  top: -7,
+                  right: -7,
+                  top: -5,
                   child: Container(
-                    width: 23,
-                    height: 23,
+                    width: 19,
+                    height: 19,
                     decoration: BoxDecoration(
                       color: const Color(0xFFFF8B06),
                       shape: BoxShape.circle,
@@ -1194,8 +1230,9 @@ class _BottomBarItem extends StatelessWidget {
                         badgeText!,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 11,
+                          fontSize: 9.2,
                           fontWeight: FontWeight.w700,
+                          height: 1.0,
                         ),
                       ),
                     ),
@@ -1203,15 +1240,17 @@ class _BottomBarItem extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 7),
+          const SizedBox(height: 5),
           Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor,
-              fontSize: 11.6,
+              fontSize: 10.2,
               fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+              height: 1.0,
             ),
           ),
         ],
