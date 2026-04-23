@@ -1,4 +1,4 @@
-package com.example.study_abroad_app
+package com.terabyte.ai.studyabroad
 
 import io.flutter.embedding.android.FlutterActivity
 
