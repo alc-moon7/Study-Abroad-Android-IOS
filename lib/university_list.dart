@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'community_page.dart';
+import 'study_bottom_bar.dart';
+
 class UniversityListScreen extends StatefulWidget {
   const UniversityListScreen({super.key});
 
@@ -77,6 +80,17 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
         _shortlistedIds.add(id);
       }
     });
+  }
+
+  void _onBottomTabSelected(StudyBottomTab tab) {
+    if (tab == StudyBottomTab.universities) {
+      return;
+    }
+    if (tab == StudyBottomTab.community) {
+      Navigator.of(context).push(
+        buildBottomTabRoute(const CommunityPage()),
+      );
+    }
   }
 
   @override
@@ -162,11 +176,14 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
                           ],
                         ),
                       ),
-                      const Positioned(
+                      Positioned(
                         left: 0,
                         right: 0,
                         bottom: 10,
-                        child: _BottomBar(),
+                        child: StudyBottomBar(
+                          activeTab: StudyBottomTab.universities,
+                          onTabSelected: _onBottomTabSelected,
+                        ),
                       ),
                     ],
                   ),
@@ -1120,141 +1137,6 @@ class _AdviceCard extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _BottomBar extends StatelessWidget {
-  const _BottomBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 78,
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFF8B4300).withOpacity(0.94),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            child: _BottomBarItem(
-              icon: Icons.home_outlined,
-              label: 'Home',
-            ),
-          ),
-          Expanded(
-            child: _BottomBarItem(
-              icon: Icons.school_rounded,
-              label: 'Universities',
-              active: true,
-            ),
-          ),
-          Expanded(
-            child: _BottomBarItem(
-              icon: Icons.favorite_border_rounded,
-              label: 'Shortlist',
-              badgeText: '3',
-            ),
-          ),
-          Expanded(
-            child: _BottomBarItem(
-              icon: Icons.groups_rounded,
-              label: 'Community',
-            ),
-          ),
-          Expanded(
-            child: _BottomBarItem(
-              icon: Icons.person_outline_rounded,
-              label: 'Profile',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BottomBarItem extends StatelessWidget {
-  const _BottomBarItem({
-    required this.icon,
-    required this.label,
-    this.active = false,
-    this.badgeText,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool active;
-  final String? badgeText;
-
-  @override
-  Widget build(BuildContext context) {
-    final iconColor =
-        active ? const Color(0xFFFFD27A) : Colors.white.withOpacity(0.86);
-    final textColor =
-        active ? const Color(0xFFFFE3A5) : Colors.white.withOpacity(0.88);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Icon(
-                icon,
-                size: 24,
-                color: iconColor,
-              ),
-              if (badgeText != null)
-                Positioned(
-                  right: -7,
-                  top: -5,
-                  child: Container(
-                    width: 19,
-                    height: 19,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF8B06),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        badgeText!,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 9.2,
-                          fontWeight: FontWeight.w700,
-                          height: 1.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 10.2,
-              fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-              height: 1.0,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

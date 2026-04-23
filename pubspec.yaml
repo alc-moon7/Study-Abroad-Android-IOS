@@ -62,6 +62,7 @@ flutter:
     - assets/icon/app_icon.png
     - assets/icon/fox_full_character.png
     - assets/icon/fox_search_header.png
+    - assets/icon/community_fox.png
     - assets/ui/cloud_comic_outline.png
     - assets/ui/cloud_comic_filled.png
 

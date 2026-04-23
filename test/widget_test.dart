@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:study_abroad_app/assistant_intro_screen.dart';
 import 'package:study_abroad_app/assistant_budget_intro_screen.dart';
+import 'package:study_abroad_app/community_page.dart';
 import 'package:study_abroad_app/assistant_qualification_intro_screen.dart';
 import 'package:study_abroad_app/main.dart';
 import 'package:study_abroad_app/university_list.dart';
@@ -74,5 +75,11 @@ void main() {
     expect(find.byType(UniversityListScreen), findsOneWidget);
     expect(find.text('Explore Universities'), findsOneWidget);
     expect(find.text('Harvard University'), findsOneWidget);
+
+    await tester.tap(find.text('Community'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CommunityPage), findsOneWidget);
+    expect(find.text('Learn. Share. Grow together.'), findsOneWidget);
   });
 }
