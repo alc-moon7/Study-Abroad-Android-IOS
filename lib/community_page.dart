@@ -173,7 +173,7 @@ class _CommunityPageState extends State<CommunityPage> {
                                 final category = _categories[index];
                                 final selected =
                                     _selectedCategoryIndex == index ||
-                                    (index == 0 && category.active);
+                                        (index == 0 && category.active);
                                 return _CommunityCategoryChip(
                                   data: category,
                                   selected: selected,
@@ -563,23 +563,26 @@ class _CommunitySortRow extends StatelessWidget {
                       onTap: () => onSelected(index),
                       borderRadius: BorderRadius.circular(18),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              _CommunityPageState._sortTabs[index],
-                              style: TextStyle(
-                                color: selected
-                                    ? const Color(0xFFF47C11)
-                                    : const Color(0xFF1F1D23),
-                                fontSize: 14.0,
-                                fontWeight: selected
-                                    ? FontWeight.w700
-                                    : FontWeight.w600,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                _CommunityPageState._sortTabs[index],
+                                style: TextStyle(
+                                  color: selected
+                                      ? const Color(0xFFF47C11)
+                                      : const Color(0xFF1F1D23),
+                                  fontSize: 14.0,
+                                  fontWeight: selected
+                                      ? FontWeight.w700
+                                      : FontWeight.w600,
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 4),
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 220),
                               width: selected ? 44 : 0,
@@ -676,17 +679,13 @@ class _CommunityCategoryChip extends StatelessWidget {
               Icon(
                 data.icon,
                 size: 22,
-                color: selected
-                    ? Colors.white
-                    : const Color(0xFF2C2A28),
+                color: selected ? Colors.white : const Color(0xFF2C2A28),
               ),
               const SizedBox(width: 10),
               Text(
                 data.label,
                 style: TextStyle(
-                  color: selected
-                      ? Colors.white
-                      : const Color(0xFF2C2A28),
+                  color: selected ? Colors.white : const Color(0xFF2C2A28),
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -855,19 +854,26 @@ class _CommunityPostCard extends StatelessWidget {
             const _CommunityTravelBanner(),
           ],
           const SizedBox(height: 14),
-          Row(
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const _ReactionCluster(),
-              const SizedBox(width: 10),
-              Text(
-                data.reactionCount,
-                style: const TextStyle(
-                  color: Color(0xFF4A4651),
-                  fontSize: 13.6,
-                  fontWeight: FontWeight.w500,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const _ReactionCluster(),
+                  const SizedBox(width: 10),
+                  Text(
+                    data.reactionCount,
+                    style: const TextStyle(
+                      color: Color(0xFF4A4651),
+                      fontSize: 13.6,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
-              const Spacer(),
               Text(
                 data.comments,
                 style: const TextStyle(
@@ -876,7 +882,6 @@ class _CommunityPostCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(width: 16),
               Text(
                 data.shares,
                 style: const TextStyle(
@@ -928,13 +933,15 @@ class _ReactionCluster extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 70,
+      height: 26,
       child: Stack(
         clipBehavior: Clip.none,
         children: const [
           _ReactionBubble(
             left: 0,
             background: Color(0xFF2E8EFF),
-            child: Icon(Icons.thumb_up_alt_rounded, color: Colors.white, size: 15),
+            child:
+                Icon(Icons.thumb_up_alt_rounded, color: Colors.white, size: 15),
           ),
           _ReactionBubble(
             left: 20,
@@ -995,24 +1002,28 @@ class _PostAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          color: const Color(0xFF605A63),
-          size: 28,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF5F5962),
-            fontSize: 13.4,
-            fontWeight: FontWeight.w500,
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: const Color(0xFF605A63),
+            size: 28,
           ),
-        ),
-      ],
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Color(0xFF5F5962),
+              fontSize: 13.4,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1261,28 +1272,28 @@ class _CommunityAvatar extends StatelessWidget {
       height: 54,
       child: switch (kind) {
         _CommunityAvatarKind.rohan => const _IllustratedAvatar(
-          hairColor: Color(0xFF2D211E),
-          shirtColor: Color(0xFFF2A126),
-          background1: Color(0xFFE4D7CC),
-          background2: Color(0xFFC5B08F),
-        ),
+            hairColor: Color(0xFF2D211E),
+            shirtColor: Color(0xFFF2A126),
+            background1: Color(0xFFE4D7CC),
+            background2: Color(0xFFC5B08F),
+          ),
         _CommunityAvatarKind.anika => const _IllustratedAvatar(
-          hairColor: Color(0xFF4D342B),
-          shirtColor: Color(0xFFDBC8A7),
-          background1: Color(0xFFF0E4D9),
-          background2: Color(0xFFC9B18E),
-          feminine: true,
-        ),
+            hairColor: Color(0xFF4D342B),
+            shirtColor: Color(0xFFDBC8A7),
+            background1: Color(0xFFF0E4D9),
+            background2: Color(0xFFC9B18E),
+            feminine: true,
+          ),
         _CommunityAvatarKind.official => ClipOval(
-          child: Container(
-            color: const Color(0xFFFFF0CB),
-            padding: const EdgeInsets.all(5),
-            child: Image.asset(
-              'assets/icon/community_fox.png',
-              fit: BoxFit.cover,
+            child: Container(
+              color: const Color(0xFFFFF0CB),
+              padding: const EdgeInsets.all(5),
+              child: Image.asset(
+                'assets/icon/community_fox.png',
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
       },
     );
   }
