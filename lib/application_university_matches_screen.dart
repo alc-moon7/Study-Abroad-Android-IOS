@@ -112,51 +112,267 @@ class ApplicationUniversityMatchesScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: AppPalette.background,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: Stack(
-              children: [
-                ListView(
-                  padding: const EdgeInsets.only(top: 18, bottom: 118),
-                  children: [
-                    const _MatchesHeader(),
-                    const SizedBox(height: 18),
-                    ..._matches.map(
-                      (match) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _UniversityMatchCard(
-                          data: match,
-                          onPrimaryPressed: match.primaryAction
-                                  .toLowerCase()
-                                  .contains('apply')
-                              ? () => _openApplicationForm(context, match)
-                              : null,
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(-0.92, -1.0),
+              end: Alignment(1.0, 1.0),
+              colors: [
+                AppPalette.background,
+                AppPalette.surfaceSoft,
+                AppPalette.primarySoft,
+              ],
+              stops: [0.0, 0.68, 1.0],
+            ),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const _ApplicationBackground(),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Stack(
+                    children: [
+                      const Positioned(
+                        top: 10,
+                        left: 0,
+                        right: 0,
+                        child: SizedBox(
+                          height: 226,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              _MatchesHeader(),
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                bottom: 54,
+                                child: _SavePrompt(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Center(child: _NewSearchButton()),
-                  ],
-                ),
-                if (showBottomBar)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 10,
-                    child: StudyBottomBar(
-                      activeTab: StudyBottomTab.application,
-                      onTabSelected: (tab) =>
-                          _onBottomTabSelected(context, tab),
-                    ),
+                      const Positioned(
+                        top: 184,
+                        left: 0,
+                        right: 0,
+                        child: _MatchSummaryRow(),
+                      ),
+                      Positioned(
+                        top: 238,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: ListView(
+                          padding: const EdgeInsets.only(bottom: 118),
+                          children: [
+                            ..._matches.map(
+                              (match) => Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: _UniversityMatchCard(
+                                  data: match,
+                                  onPrimaryPressed: match.primaryAction
+                                          .toLowerCase()
+                                          .contains('apply')
+                                      ? () => _openApplicationForm(
+                                            context,
+                                            match,
+                                          )
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            const Center(child: _NewSearchButton()),
+                          ],
+                        ),
+                      ),
+                      if (showBottomBar)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 10,
+                          child: StudyBottomBar(
+                            activeTab: StudyBottomTab.application,
+                            onTabSelected: (tab) =>
+                                _onBottomTabSelected(context, tab),
+                          ),
+                        ),
+                    ],
                   ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+class _ApplicationBackground extends StatelessWidget {
+  const _ApplicationBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          Positioned(
+            top: -56,
+            right: -86,
+            child: Transform.rotate(
+              angle: -0.34,
+              child: Container(
+                width: 430,
+                height: 166,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(220),
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      AppPalette.primary.withValues(alpha: 0.02),
+                      AppPalette.primary.withValues(alpha: 0.10),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 24,
+            right: -20,
+            child: Transform.rotate(
+              angle: -0.32,
+              child: Container(
+                width: 306,
+                height: 88,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(220),
+                  color: AppPalette.primary.withValues(alpha: 0.06),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: -72,
+            left: -52,
+            child: Container(
+              width: 220,
+              height: 220,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    Color(0x10000000),
+                    Color(0x00FFFFFF),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MatchSummaryRow extends StatelessWidget {
+  const _MatchSummaryRow();
+
+  @override
+  Widget build(BuildContext context) {
+    const chips = [
+      _MatchSummaryChipData(
+        icon: Icons.workspace_premium_rounded,
+        label: '3 Matches',
+      ),
+      _MatchSummaryChipData(
+        icon: Icons.public_rounded,
+        label: 'Germany',
+      ),
+      _MatchSummaryChipData(
+        icon: Icons.business_center_outlined,
+        label: 'Business',
+      ),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 10.0;
+        final chipWidth =
+            ((constraints.maxWidth - spacing * 2) / 3).clamp(96.0, 156.0);
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: 10,
+          children: chips
+              .map(
+                (chip) => SizedBox(
+                  width: chipWidth.toDouble(),
+                  child: _MatchSummaryChip(data: chip),
+                ),
+              )
+              .toList(),
+        );
+      },
+    );
+  }
+}
+
+class _MatchSummaryChip extends StatelessWidget {
+  const _MatchSummaryChip({required this.data});
+
+  final _MatchSummaryChipData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44,
+      padding: const EdgeInsets.only(left: 8, right: 6),
+      decoration: BoxDecoration(
+        color: AppPalette.surfaceTint.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppPalette.border),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            data.icon,
+            size: 16,
+            color: AppPalette.textPrimary,
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              data.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppPalette.textPrimary,
+                fontSize: 12.2,
+                fontWeight: FontWeight.w600,
+                height: 1.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MatchSummaryChipData {
+  const _MatchSummaryChipData({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
 }
 
 class _MatchesHeader extends StatelessWidget {
@@ -167,74 +383,79 @@ class _MatchesHeader extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final titleSize = (width * 0.083).clamp(28.0, 38.0).toDouble();
-        final subtitleSize = (width * 0.035).clamp(13.4, 16.0).toDouble();
-        final foxSize = (width * 0.26).clamp(82.0, 112.0).toDouble();
+        final titleSize = (width * 0.085).clamp(28.0, 38.0).toDouble();
+        final subtitleSize = (width * 0.035).clamp(13.2, 16.0).toDouble();
+        final badgeSize = (width * 0.40).clamp(128.0, 168.0).toDouble();
 
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned(
-              right: -6,
-              bottom: 14,
-              child: _AiAvatar(size: foxSize),
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: width * 0.72),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'YOUR PERSONALIZED MATCHES',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppPalette.primary,
-                      fontSize: 10.4,
-                      fontWeight: FontWeight.w800,
-                      height: 1.0,
-                      letterSpacing: 1.6,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Here are your dream universities',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppPalette.textPrimary,
-                      fontSize: titleSize,
-                      fontWeight: FontWeight.w800,
-                      height: 0.98,
-                      letterSpacing: -0.6,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Based on your profile, I found 3 programs in business that align beautifully with your goals, budget, and strengths.',
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppPalette.textSecondary,
-                      fontSize: subtitleSize,
-                      fontWeight: FontWeight.w500,
-                      height: 1.35,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const _SavePrompt(),
-                ],
+        return SizedBox(
+          height: 164,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                right: -8,
+                bottom: -6,
+                child: _MatchInsightBadge(size: badgeSize),
               ),
-            ),
-          ],
+              Positioned(
+                left: 0,
+                top: 10,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: width * 0.64),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'YOUR PERSONALIZED MATCHES',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: AppPalette.primary,
+                          fontSize: 10.4,
+                          fontWeight: FontWeight.w800,
+                          height: 1.0,
+                          letterSpacing: 1.6,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Here are your dream universities',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: AppPalette.textPrimary,
+                          fontSize: titleSize,
+                          fontWeight: FontWeight.w800,
+                          height: 0.98,
+                          letterSpacing: -0.6,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '3 business programs matched to your goals.',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: AppPalette.textSecondary,
+                          fontSize: subtitleSize,
+                          fontWeight: FontWeight.w500,
+                          height: 1.25,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class _AiAvatar extends StatelessWidget {
-  const _AiAvatar({required this.size});
+class _MatchInsightBadge extends StatelessWidget {
+  const _MatchInsightBadge({required this.size});
 
   final double size;
 
@@ -256,10 +477,89 @@ class _AiAvatar extends StatelessWidget {
           ),
         ],
       ),
-      child: Image.asset(
-        'assets/icon/fox_search_header.png',
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.high,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: size * 0.68,
+            height: size * 0.68,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppPalette.surfaceTint,
+              border: Border.all(color: AppPalette.border),
+            ),
+          ),
+          Container(
+            width: size * 0.46,
+            height: size * 0.46,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppPalette.primary,
+              boxShadow: [
+                BoxShadow(
+                  color: AppPalette.shadow.withValues(alpha: 0.08),
+                  blurRadius: 14,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.school_rounded,
+              color: AppPalette.surface,
+              size: size * 0.25,
+            ),
+          ),
+          Positioned(
+            top: size * 0.12,
+            right: size * 0.14,
+            child: Container(
+              width: size * 0.22,
+              height: size * 0.22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppPalette.surface,
+                border: Border.all(color: AppPalette.primaryBorder),
+              ),
+              child: Icon(
+                Icons.auto_awesome_rounded,
+                color: AppPalette.primary,
+                size: size * 0.12,
+              ),
+            ),
+          ),
+          Positioned(
+            left: size * 0.16,
+            right: size * 0.16,
+            bottom: size * 0.10,
+            child: Container(
+              height: size * 0.22,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppPalette.surface,
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: AppPalette.border),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppPalette.shadow.withValues(alpha: 0.06),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Text(
+                '95% match',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: AppPalette.textPrimary,
+                  fontSize: (size * 0.075).clamp(9.5, 12.0).toDouble(),
+                  fontWeight: FontWeight.w900,
+                  height: 1.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -270,51 +570,63 @@ class _SavePrompt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      runSpacing: 8,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {},
-            borderRadius: BorderRadius.circular(999),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-              decoration: BoxDecoration(
-                color: AppPalette.primary,
-                borderRadius: BorderRadius.circular(999),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppPalette.primary.withValues(alpha: 0.22),
-                    blurRadius: 14,
-                    offset: const Offset(0, 7),
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: AppPalette.surface.withValues(alpha: 0.98),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppPalette.border),
+        boxShadow: [
+          BoxShadow(
+            color: AppPalette.shadow.withValues(alpha: 0.06),
+            blurRadius: 18,
+            offset: const Offset(0, 7),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(999),
+              child: Ink(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+                decoration: BoxDecoration(
+                  color: AppPalette.primary,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Text(
+                  'Sign in to save',
+                  style: TextStyle(
+                    color: AppPalette.surface,
+                    fontSize: 11.2,
+                    fontWeight: FontWeight.w800,
+                    height: 1.0,
                   ),
-                ],
-              ),
-              child: const Text(
-                'Sign in to save',
-                style: TextStyle(
-                  color: AppPalette.surface,
-                  fontSize: 12.2,
-                  fontWeight: FontWeight.w800,
-                  height: 1.0,
                 ),
               ),
             ),
           ),
-        ),
-        const Text(
-          'Your results are available now — sign in only to save',
-          style: TextStyle(
-            color: AppPalette.textSoft,
-            fontSize: 11.2,
-            fontWeight: FontWeight.w500,
-            height: 1.2,
+          const SizedBox(width: 8),
+          const Expanded(
+            child: Text(
+              'Results ready — sign in only to save',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppPalette.textSoft,
+                fontSize: 11.2,
+                fontWeight: FontWeight.w500,
+                height: 1.0,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
