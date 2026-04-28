@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app_theme.dart';
+
 typedef AssistantFlowAction = Future<void> Function(
   BuildContext context,
   String? answer,
@@ -178,8 +180,8 @@ class _AssistantQuestionScreenState extends State<AssistantQuestionScreen>
               begin: Alignment(-0.92, -1.0),
               end: Alignment(1.0, 1.0),
               colors: [
-                Color(0xFFFFCF22),
-                Color(0xFFFF8100),
+                AppPalette.background,
+                AppPalette.surfaceSoft,
               ],
             ),
           ),
@@ -192,7 +194,7 @@ class _AssistantQuestionScreenState extends State<AssistantQuestionScreen>
                     center: Alignment(0.05, -0.05),
                     radius: 1.08,
                     colors: [
-                      Color(0x28FFFFFF),
+                      Color(0x28E8665D),
                       Color(0x00FFFFFF),
                     ],
                   ),
@@ -209,8 +211,8 @@ class _AssistantQuestionScreenState extends State<AssistantQuestionScreen>
                         end: Alignment.bottomCenter,
                         colors: [
                           const Color(0x00FFFFFF),
-                          const Color(0x4DE35A00).withOpacity(0.42),
-                          const Color(0xB5451300).withOpacity(0.64),
+                          AppPalette.primarySoft.withValues(alpha: 0.42),
+                          AppPalette.primaryBorder.withValues(alpha: 0.40),
                         ],
                       ),
                     ),
@@ -407,12 +409,13 @@ class _TopBar extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.18),
+                color: AppPalette.surface.withValues(alpha: 0.96),
                 shape: BoxShape.circle,
+                border: Border.all(color: AppPalette.border),
               ),
               child: const Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: Colors.white,
+                color: AppPalette.primary,
                 size: 18,
               ),
             ),
@@ -427,10 +430,10 @@ class _TopBar extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: AppPalette.surface.withValues(alpha: 0.96),
                   borderRadius: BorderRadius.circular(999),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.15),
+                    color: AppPalette.border,
                   ),
                 ),
                 child: const Row(
@@ -438,14 +441,14 @@ class _TopBar extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.auto_awesome_rounded,
-                      color: Colors.white,
+                      color: AppPalette.primary,
                       size: 14,
                     ),
                     SizedBox(width: 6),
                     Text(
                       'NEW ASSISTANT',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppPalette.primaryDark,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.65,
@@ -461,8 +464,8 @@ class _TopBar extends StatelessWidget {
         TextButton(
           onPressed: isBusy ? null : onSkip,
           style: TextButton.styleFrom(
-            foregroundColor: Colors.white,
-            disabledForegroundColor: Colors.white.withOpacity(0.78),
+            foregroundColor: AppPalette.primaryDark,
+            disabledForegroundColor: AppPalette.textMuted,
             textStyle: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
@@ -549,7 +552,7 @@ class _PopularChoicesPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titleStyle = TextStyle(
-      color: Colors.white,
+      color: AppPalette.primary,
       fontWeight: FontWeight.w700,
       fontSize: keyboardVisible ? 12.8 : 14.2,
       letterSpacing: 0.9,
@@ -570,18 +573,16 @@ class _PopularChoicesPanel extends StatelessWidget {
             padding: cardPadding,
             decoration: BoxDecoration(
               color: keyboardVisible
-                  ? Colors.white.withOpacity(0.14)
+                  ? AppPalette.surface.withValues(alpha: 0.96)
                   : Colors.transparent,
               borderRadius: cardRadius,
               border: Border.all(
-                color: keyboardVisible
-                    ? Colors.white.withOpacity(0.18)
-                    : Colors.transparent,
+                color: keyboardVisible ? AppPalette.border : Colors.transparent,
               ),
               boxShadow: keyboardVisible
                   ? [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.10),
+                        color: AppPalette.shadow.withValues(alpha: 0.08),
                         blurRadius: 18,
                         offset: const Offset(0, 10),
                       ),
@@ -731,7 +732,7 @@ class _SpeechBubble extends StatelessWidget {
     required double maxFontSize,
     required double minFontSize,
   }) {
-    const color = Color(0xFF151515);
+    const color = AppPalette.textPrimary;
     const fontWeight = FontWeight.w500;
     const lineHeight = 1.24;
     final direction = Directionality.of(context);
@@ -789,11 +790,11 @@ class _ChoiceChip extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.92),
+            color: AppPalette.surface.withValues(alpha: 0.96),
             borderRadius: BorderRadius.circular(26),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.10),
+                color: AppPalette.shadow.withValues(alpha: 0.08),
                 blurRadius: 18,
                 offset: const Offset(0, 8),
               ),
@@ -811,7 +812,7 @@ class _ChoiceChip extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: Color(0xFF363636),
+                    color: AppPalette.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -853,11 +854,11 @@ class _InputDock extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: minHeight),
           padding: const EdgeInsets.fromLTRB(18, 12, 14, 12),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.90),
+            color: AppPalette.surface.withValues(alpha: 0.96),
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.12),
+                color: AppPalette.shadow.withValues(alpha: 0.10),
                 blurRadius: 24,
                 offset: const Offset(0, 10),
               ),
@@ -870,12 +871,12 @@ class _InputDock extends StatelessWidget {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF4F0EA),
+                  color: AppPalette.surfaceTint,
                   borderRadius: BorderRadius.circular(17),
                 ),
                 child: const Icon(
                   Icons.language_rounded,
-                  color: Color(0xFF5B5044),
+                  color: AppPalette.textSecondary,
                   size: 20,
                 ),
               ),
@@ -890,9 +891,9 @@ class _InputDock extends StatelessWidget {
                   onSubmitted: onSubmitted,
                   keyboardType: TextInputType.multiline,
                   textCapitalization: TextCapitalization.sentences,
-                  cursorColor: const Color(0xFF8F8376),
+                  cursorColor: AppPalette.primary,
                   style: const TextStyle(
-                    color: Color(0xFF5B5044),
+                    color: AppPalette.textSecondary,
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     height: 1.25,
@@ -902,7 +903,7 @@ class _InputDock extends StatelessWidget {
                     isCollapsed: true,
                     hintText: 'Type your answer....',
                     hintStyle: TextStyle(
-                      color: Color(0xFF8C8177),
+                      color: AppPalette.textMuted,
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
@@ -919,12 +920,12 @@ class _InputDock extends StatelessWidget {
                     width: 38,
                     height: 38,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF7B24B),
+                      color: AppPalette.primary,
                       borderRadius: BorderRadius.circular(19),
                     ),
                     child: const Icon(
                       Icons.send_rounded,
-                      color: Colors.white,
+                      color: AppPalette.surface,
                       size: 18,
                     ),
                   ),
@@ -962,7 +963,7 @@ class _ProgressDots extends StatelessWidget {
             width: 24,
             height: 6,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppPalette.primary,
               borderRadius: BorderRadius.circular(999),
             ),
           );
@@ -971,8 +972,8 @@ class _ProgressDots extends StatelessWidget {
         return Container(
           width: 6,
           height: 6,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.75),
+          decoration: const BoxDecoration(
+            color: AppPalette.primaryBorder,
             shape: BoxShape.circle,
           ),
         );

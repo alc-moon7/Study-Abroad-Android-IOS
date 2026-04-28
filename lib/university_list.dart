@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app_theme.dart';
+import 'application_university_matches_screen.dart';
 import 'community_page.dart';
 import 'study_bottom_bar.dart';
 
@@ -86,6 +88,12 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
     if (tab == StudyBottomTab.universities) {
       return;
     }
+    if (tab == StudyBottomTab.application) {
+      Navigator.of(context).push(
+        buildBottomTabRoute(const ApplicationUniversityMatchesScreen()),
+      );
+      return;
+    }
     if (tab == StudyBottomTab.community) {
       Navigator.of(context).push(
         buildBottomTabRoute(const CommunityPage()),
@@ -101,16 +109,16 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
         systemNavigationBarColor: Colors.transparent,
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppPalette.background,
         body: DecoratedBox(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment(-0.92, -1.0),
               end: Alignment(1.0, 1.0),
               colors: [
-                Color(0xFFFFCB32),
-                Color(0xFFFFAA1F),
-                Color(0xFFFF9120),
+                AppPalette.background,
+                AppPalette.surfaceSoft,
+                AppPalette.primarySoft,
               ],
               stops: [0.0, 0.68, 1.0],
             ),
@@ -219,8 +227,8 @@ class _UniversityBackground extends StatelessWidget {
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                     colors: [
-                      Colors.white.withOpacity(0.03),
-                      Colors.white.withOpacity(0.16),
+                      AppPalette.primary.withValues(alpha: 0.02),
+                      AppPalette.primary.withValues(alpha: 0.10),
                     ],
                   ),
                 ),
@@ -237,7 +245,7 @@ class _UniversityBackground extends StatelessWidget {
                 height: 88,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(220),
-                  color: Colors.white.withOpacity(0.08),
+                  color: AppPalette.primary.withValues(alpha: 0.06),
                 ),
               ),
             ),
@@ -252,7 +260,7 @@ class _UniversityBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    Color(0x20FFFFFF),
+                    Color(0x20E8665D),
                     Color(0x00FFFFFF),
                   ],
                 ),
@@ -302,7 +310,7 @@ class _HeroSection extends StatelessWidget {
                       Text(
                         'Explore Universities',
                         style: TextStyle(
-                          color: const Color(0xFF1E1A12),
+                          color: AppPalette.textPrimary,
                           fontSize: titleSize,
                           fontWeight: FontWeight.w800,
                           height: 0.95,
@@ -313,7 +321,7 @@ class _HeroSection extends StatelessWidget {
                       Text(
                         '500+ trusted universities worldwide',
                         style: TextStyle(
-                          color: const Color(0xFF4D3B16),
+                          color: AppPalette.textSecondary,
                           fontSize: subtitleSize,
                           fontWeight: FontWeight.w500,
                           height: 1.1,
@@ -343,11 +351,11 @@ class _SearchField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.98),
+        color: AppPalette.surface.withValues(alpha: 0.98),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: AppPalette.shadow.withValues(alpha: 0.06),
             blurRadius: 18,
             offset: const Offset(0, 7),
           ),
@@ -358,7 +366,7 @@ class _SearchField extends StatelessWidget {
           const Center(
             child: Icon(
               Icons.search_rounded,
-              color: Color(0xFF303030),
+              color: AppPalette.textPrimary,
               size: 22,
             ),
           ),
@@ -371,9 +379,9 @@ class _SearchField extends StatelessWidget {
                   controller: controller,
                   maxLines: 1,
                   textAlignVertical: TextAlignVertical.center,
-                  cursorColor: const Color(0xFF8E8067),
+                  cursorColor: AppPalette.primary,
                   style: const TextStyle(
-                    color: Color(0xFF37332E),
+                    color: AppPalette.textPrimary,
                     fontSize: 13.6,
                     fontWeight: FontWeight.w500,
                     height: 1.0,
@@ -385,7 +393,7 @@ class _SearchField extends StatelessWidget {
                     border: InputBorder.none,
                     hintText: 'Search university, course or country...',
                     hintStyle: TextStyle(
-                      color: Color(0xFF7F7A72),
+                      color: AppPalette.textMuted,
                       fontSize: 13.6,
                       fontWeight: FontWeight.w500,
                       height: 1.0,
@@ -458,10 +466,10 @@ class _FilterChip extends StatelessWidget {
       height: 44,
       padding: const EdgeInsets.only(left: 8, right: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFEDB8).withOpacity(0.9),
+        color: AppPalette.surfaceTint.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: Colors.white.withOpacity(0.36),
+          color: AppPalette.border,
         ),
       ),
       child: Row(
@@ -469,7 +477,7 @@ class _FilterChip extends StatelessWidget {
           Icon(
             data.icon,
             size: 16,
-            color: const Color(0xFF2B2B2B),
+            color: AppPalette.textPrimary,
           ),
           const SizedBox(width: 4),
           Expanded(
@@ -479,7 +487,7 @@ class _FilterChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                color: Color(0xFF292826),
+                color: AppPalette.textPrimary,
                 fontSize: 12.2,
                 fontWeight: FontWeight.w600,
                 height: 1.0,
@@ -491,7 +499,7 @@ class _FilterChip extends StatelessWidget {
             Icon(
               data.trailingIcon,
               size: 16,
-              color: const Color(0xFF2B2B2B),
+              color: AppPalette.textPrimary,
             ),
           ],
         ],
@@ -516,11 +524,11 @@ class _UniversityCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(9, 5, 9, 5),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.985),
+        color: AppPalette.surface.withValues(alpha: 0.985),
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7A3F00).withOpacity(0.08),
+            color: AppPalette.shadow.withValues(alpha: 0.08),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -535,10 +543,9 @@ class _UniversityCard extends StatelessWidget {
               (constraints.maxWidth * 0.275).clamp(92.0, 108.0).toDouble();
           final availableInfoWidth =
               constraints.maxWidth - logoWidth - statsWidth - 27;
-          final titleSize =
-              data.name.length > 26
-                  ? (compact ? 13.2 : 13.8)
-                  : (compact ? 14.4 : 15.4);
+          final titleSize = data.name.length > 26
+              ? (compact ? 13.2 : 13.8)
+              : (compact ? 14.4 : 15.4);
           final bodySize = availableInfoWidth < 118 ? 11.2 : 11.8;
 
           return SizedBox(
@@ -552,7 +559,7 @@ class _UniversityCard extends StatelessWidget {
                 Container(
                   width: 1,
                   margin: const EdgeInsets.symmetric(vertical: 8),
-                  color: const Color(0xFFF1E8DC),
+                  color: AppPalette.divider,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -602,7 +609,7 @@ class _UniversityInfo extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: const Color(0xFF24212A),
+            color: AppPalette.textStrong,
             fontSize: titleSize,
             fontWeight: FontWeight.w800,
             height: 0.98,
@@ -620,7 +627,7 @@ class _UniversityInfo extends StatelessWidget {
               TextSpan(
                 text: data.location,
                 style: TextStyle(
-                  color: const Color(0xFF87807B),
+                  color: AppPalette.textMuted,
                   fontSize: bodySize,
                   fontWeight: FontWeight.w500,
                   height: 1.0,
@@ -636,14 +643,14 @@ class _UniversityInfo extends StatelessWidget {
           children: [
             Icon(
               Icons.star_rounded,
-              color: const Color(0xFFFFB400),
+              color: AppPalette.primary,
               size: bodySize + 6.4,
             ),
             const SizedBox(width: 3),
             Text(
               data.rating,
               style: TextStyle(
-                color: const Color(0xFF292736),
+                color: AppPalette.textPrimary,
                 fontSize: bodySize + 0.8,
                 fontWeight: FontWeight.w700,
               ),
@@ -655,7 +662,7 @@ class _UniversityInfo extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: const Color(0xFF4E4A57),
+                  color: AppPalette.textSecondary,
                   fontSize: bodySize,
                   fontWeight: FontWeight.w500,
                   height: 1.0,
@@ -668,7 +675,7 @@ class _UniversityInfo extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
           decoration: BoxDecoration(
-            color: const Color(0xFFFBE8C1),
+            color: AppPalette.primarySoft,
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
@@ -676,7 +683,7 @@ class _UniversityInfo extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: const Color(0xFF7A591A),
+              color: AppPalette.primaryDark,
               fontSize: bodySize - 0.4,
               fontWeight: FontWeight.w600,
               height: 1.0,
@@ -705,13 +712,13 @@ class _UniversityStats extends StatelessWidget {
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 96;
         final labelStyle = TextStyle(
-          color: const Color(0xFF908681),
+          color: AppPalette.textMuted,
           fontSize: compact ? 10.6 : 11.2,
           fontWeight: FontWeight.w500,
           height: 1.0,
         );
         final valueStyle = TextStyle(
-          color: const Color(0xFF28242F),
+          color: AppPalette.textPrimary,
           fontSize: compact ? 11.8 : 12.8,
           fontWeight: FontWeight.w700,
           height: 1.08,
@@ -732,11 +739,11 @@ class _UniversityStats extends StatelessWidget {
                     height: compact ? 34 : 38,
                     decoration: BoxDecoration(
                       color: shortlisted
-                          ? const Color(0xFFFFF2F0)
-                          : const Color(0xFFFDFBF8),
+                          ? AppPalette.primarySoft
+                          : AppPalette.surfaceSoft,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: const Color(0xFFE7E1D8),
+                        color: AppPalette.border,
                       ),
                     ),
                     child: Icon(
@@ -744,8 +751,8 @@ class _UniversityStats extends StatelessWidget {
                           ? Icons.favorite_rounded
                           : Icons.favorite_border_rounded,
                       color: shortlisted
-                          ? const Color(0xFFFF6B61)
-                          : const Color(0xFF262626),
+                          ? AppPalette.primary
+                          : AppPalette.textPrimary,
                       size: compact ? 17 : 19,
                     ),
                   ),
@@ -767,7 +774,7 @@ class _UniversityStats extends StatelessWidget {
                   TextSpan(
                     text: ' / year',
                     style: TextStyle(
-                      color: const Color(0xFF6F6761),
+                      color: AppPalette.textSecondary,
                       fontSize: compact ? 10.2 : 11.0,
                       fontWeight: FontWeight.w500,
                       height: 1.0,
@@ -1053,11 +1060,11 @@ class _AdviceCard extends StatelessWidget {
             compact ? 12 : 14,
           ),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.92),
+            color: AppPalette.surface.withValues(alpha: 0.96),
             borderRadius: BorderRadius.circular(22),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: AppPalette.shadow.withValues(alpha: 0.05),
                 blurRadius: 14,
                 offset: const Offset(0, 6),
               ),
@@ -1070,12 +1077,12 @@ class _AdviceCard extends StatelessWidget {
                 width: iconSize,
                 height: iconSize,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFFF0CB),
+                  color: AppPalette.primarySoft,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.workspace_premium_rounded,
-                  color: Color(0xFFF5B018),
+                  color: AppPalette.primary,
                   size: 29,
                 ),
               ),
@@ -1091,7 +1098,7 @@ class _AdviceCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: const Color(0xFF201C19),
+                        color: AppPalette.textPrimary,
                         fontSize: compact ? 11.8 : 13.0,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.15,
@@ -1104,7 +1111,7 @@ class _AdviceCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: const Color(0xFF5B5550),
+                        color: AppPalette.textSecondary,
                         fontSize: compact ? 10.4 : 11.2,
                         fontWeight: FontWeight.w500,
                         height: 1.1,
@@ -1120,13 +1127,13 @@ class _AdviceCard extends StatelessWidget {
                   vertical: buttonVertical,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF8804),
+                  color: AppPalette.primary,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   'Get Free Advice',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppPalette.surface,
                     fontSize: compact ? 11.2 : 12.4,
                     fontWeight: FontWeight.w700,
                     height: 1.0,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app_theme.dart';
+import 'application_university_matches_screen.dart';
 import 'study_bottom_bar.dart';
 
 class CommunityPage extends StatefulWidget {
@@ -49,8 +51,8 @@ class _CommunityPageState extends State<CommunityPage> {
       body:
           "I'm planning for Fall 2025 intake in Canada for MS in Computer Science. Need suggestions on universities and scholarship opportunities. Any help would be appreciated!",
       tag: 'Canada',
-      tagBackground: Color(0xFFFFF0E3),
-      tagForeground: Color(0xFFEE781B),
+      tagBackground: AppPalette.primarySoft,
+      tagForeground: AppPalette.primaryDark,
       reactionCount: '128',
       comments: '45 Comments',
       shares: '12 Shares',
@@ -65,8 +67,8 @@ class _CommunityPageState extends State<CommunityPage> {
       body:
           'Sharing a list of fully funded scholarships in Australia that I found helpful. Hope this helps someone!',
       tag: 'Scholarship',
-      tagBackground: Color(0xFFEDEBFF),
-      tagForeground: Color(0xFF5F57E8),
+      tagBackground: AppPalette.surfaceTint,
+      tagForeground: AppPalette.primary,
       reactionCount: '96',
       comments: '32 Comments',
       shares: '8 Shares',
@@ -80,8 +82,8 @@ class _CommunityPageState extends State<CommunityPage> {
       body:
           'Explore the best study abroad destinations for international students based on quality of education, cost, and opportunities.',
       tag: 'Official',
-      tagBackground: Color(0xFFFFEFE2),
-      tagForeground: Color(0xFFEC7B1F),
+      tagBackground: AppPalette.primarySoft,
+      tagForeground: AppPalette.primaryDark,
       reactionCount: '204',
       comments: '68 Comments',
       shares: '29 Shares',
@@ -97,6 +99,12 @@ class _CommunityPageState extends State<CommunityPage> {
     }
     if (tab == StudyBottomTab.universities) {
       Navigator.of(context).maybePop();
+      return;
+    }
+    if (tab == StudyBottomTab.application) {
+      Navigator.of(context).pushReplacement(
+        buildBottomTabRoute(const ApplicationUniversityMatchesScreen()),
+      );
     }
   }
 
@@ -112,16 +120,16 @@ class _CommunityPageState extends State<CommunityPage> {
         systemNavigationBarColor: Colors.transparent,
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppPalette.background,
         body: DecoratedBox(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment(-0.92, -1.0),
               end: Alignment(1.0, 1.0),
               colors: [
-                Color(0xFFFFCB32),
-                Color(0xFFFFAA1F),
-                Color(0xFFFF9120),
+                AppPalette.background,
+                AppPalette.surfaceSoft,
+                AppPalette.primarySoft,
               ],
               stops: [0.0, 0.68, 1.0],
             ),
@@ -138,8 +146,9 @@ class _CommunityPageState extends State<CommunityPage> {
                       Column(
                         children: [
                           SizedBox(
-                            height: 264,
+                            height: 212,
                             child: Stack(
+                              clipBehavior: Clip.none,
                               children: [
                                 _CommunityHeroSection(onBack: _goBack),
                                 const Positioned(
@@ -162,7 +171,7 @@ class _CommunityPageState extends State<CommunityPage> {
                           ),
                           const SizedBox(height: 12),
                           SizedBox(
-                            height: 54,
+                            height: 44,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               padding: EdgeInsets.zero,
@@ -209,15 +218,15 @@ class _CommunityPageState extends State<CommunityPage> {
                             onTap: () {},
                             customBorder: const CircleBorder(),
                             child: Container(
-                              width: 76,
-                              height: 76,
+                              width: 58,
+                              height: 58,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFFF9B0B),
+                                color: AppPalette.primary,
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(0xFFA04800).withOpacity(
-                                      0.20,
+                                    color: AppPalette.shadow.withValues(
+                                      alpha: 0.20,
                                     ),
                                     blurRadius: 18,
                                     offset: const Offset(0, 10),
@@ -226,8 +235,8 @@ class _CommunityPageState extends State<CommunityPage> {
                               ),
                               child: const Icon(
                                 Icons.add_rounded,
-                                size: 40,
-                                color: Colors.white,
+                                size: 30,
+                                color: AppPalette.surface,
                               ),
                             ),
                           ),
@@ -276,8 +285,8 @@ class _CommunityBackground extends StatelessWidget {
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                     colors: [
-                      Colors.white.withOpacity(0.03),
-                      Colors.white.withOpacity(0.16),
+                      AppPalette.primary.withValues(alpha: 0.02),
+                      AppPalette.primary.withValues(alpha: 0.10),
                     ],
                   ),
                 ),
@@ -294,7 +303,7 @@ class _CommunityBackground extends StatelessWidget {
                 height: 88,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(220),
-                  color: Colors.white.withOpacity(0.08),
+                  color: AppPalette.primary.withValues(alpha: 0.06),
                 ),
               ),
             ),
@@ -309,7 +318,7 @@ class _CommunityBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    Color(0x20FFFFFF),
+                    Color(0x20E8665D),
                     Color(0x00FFFFFF),
                   ],
                 ),
@@ -332,11 +341,11 @@ class _CommunityHeroSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final titleSize = (width * 0.095).clamp(28.0, 40.0).toDouble();
-        final subtitleSize = (width * 0.048).clamp(16.0, 20.0).toDouble();
+        final titleSize = (width * 0.085).clamp(28.0, 38.0).toDouble();
+        final subtitleSize = (width * 0.035).clamp(14.0, 18.0).toDouble();
 
         return SizedBox(
-          height: 222,
+          height: 164,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -357,26 +366,26 @@ class _CommunityHeroSection extends StatelessWidget {
               ),
               Positioned(
                 right: -6,
-                bottom: 18,
+                bottom: -4,
                 child: Image.asset(
                   'assets/icon/community_fox.png',
-                  width: (width * 0.41).clamp(170.0, 228.0).toDouble(),
+                  width: (width * 0.43).clamp(138.0, 178.0).toDouble(),
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.high,
                 ),
               ),
               Positioned(
                 left: 0,
-                top: 74,
+                top: 66,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: width * 0.58),
+                  constraints: BoxConstraints(maxWidth: width * 0.60),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Community',
                         style: TextStyle(
-                          color: const Color(0xFF1E1A12),
+                          color: AppPalette.textPrimary,
                           fontSize: titleSize,
                           fontWeight: FontWeight.w800,
                           height: 0.96,
@@ -387,7 +396,7 @@ class _CommunityHeroSection extends StatelessWidget {
                       Text(
                         'Learn. Share. Grow together.',
                         style: TextStyle(
-                          color: const Color(0xFF3B2C12),
+                          color: AppPalette.textSecondary,
                           fontSize: subtitleSize,
                           fontWeight: FontWeight.w500,
                           height: 1.1,
@@ -422,16 +431,17 @@ class _HeroCircleButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Ink(
-          width: 44,
-          height: 44,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.28),
+            color: AppPalette.surface.withValues(alpha: 0.96),
             shape: BoxShape.circle,
+            border: Border.all(color: AppPalette.border),
           ),
           child: Icon(
             icon,
-            color: const Color(0xFF2A241C),
-            size: 24,
+            color: AppPalette.primary,
+            size: 22,
           ),
         ),
       ),
@@ -445,30 +455,30 @@ class _CommunityComposerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 108,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.985),
-        borderRadius: BorderRadius.circular(28),
+        color: AppPalette.surface.withValues(alpha: 0.98),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7A3F00).withOpacity(0.10),
+            color: AppPalette.shadow.withValues(alpha: 0.06),
             blurRadius: 18,
-            offset: const Offset(0, 8),
+            offset: const Offset(0, 7),
           ),
         ],
       ),
       child: Row(
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 28,
+            height: 28,
             decoration: const BoxDecoration(
-              color: Color(0xFFFFF0CB),
+              color: AppPalette.primarySoft,
               shape: BoxShape.circle,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(7),
+              padding: const EdgeInsets.all(3),
               child: ClipOval(
                 child: Image.asset(
                   'assets/icon/community_fox.png',
@@ -477,41 +487,43 @@ class _CommunityComposerCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 8),
           const Expanded(
             child: Text(
               "What’s on your mind?",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Color(0xFF8A8782),
-                fontSize: 16.4,
+                color: AppPalette.textMuted,
+                fontSize: 13.6,
                 fontWeight: FontWeight.w500,
+                height: 1.0,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF0E1),
-              borderRadius: BorderRadius.circular(24),
+              color: AppPalette.surfaceTint,
+              borderRadius: BorderRadius.circular(16),
             ),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   Icons.edit_rounded,
-                  color: Color(0xFFFF8710),
-                  size: 22,
+                  color: AppPalette.primary,
+                  size: 16,
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 5),
                 Text(
                   'Post',
                   style: TextStyle(
-                    color: Color(0xFFF5790F),
-                    fontSize: 15.2,
+                    color: AppPalette.primaryDark,
+                    fontSize: 12.2,
                     fontWeight: FontWeight.w700,
+                    height: 1.0,
                   ),
                 ),
               ],
@@ -538,14 +550,14 @@ class _CommunitySortRow extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.985),
-              borderRadius: BorderRadius.circular(26),
+              color: AppPalette.surface.withValues(alpha: 0.985),
+              borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF7A3F00).withOpacity(0.06),
+                  color: AppPalette.shadow.withValues(alpha: 0.06),
                   blurRadius: 14,
                   offset: const Offset(0, 6),
                 ),
@@ -561,9 +573,9 @@ class _CommunitySortRow extends StatelessWidget {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () => onSelected(index),
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(14),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        padding: const EdgeInsets.symmetric(vertical: 3),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -573,22 +585,23 @@ class _CommunitySortRow extends StatelessWidget {
                                 _CommunityPageState._sortTabs[index],
                                 style: TextStyle(
                                   color: selected
-                                      ? const Color(0xFFF47C11)
-                                      : const Color(0xFF1F1D23),
-                                  fontSize: 14.0,
+                                      ? AppPalette.primary
+                                      : AppPalette.textPrimary,
+                                  fontSize: 12.2,
                                   fontWeight: selected
                                       ? FontWeight.w700
                                       : FontWeight.w600,
+                                  height: 1.0,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 3),
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 220),
-                              width: selected ? 44 : 0,
-                              height: 3.2,
+                              width: selected ? 34 : 0,
+                              height: 2.4,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF47C11),
+                                color: AppPalette.primary,
                                 borderRadius: BorderRadius.circular(999),
                               ),
                             ),
@@ -602,38 +615,39 @@ class _CommunitySortRow extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Container(
-          height: 60,
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFF1D0).withOpacity(0.95),
-            borderRadius: BorderRadius.circular(24),
+            color: AppPalette.surfaceTint.withValues(alpha: 0.95),
+            borderRadius: BorderRadius.circular(18),
           ),
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.filter_alt_outlined,
-                color: Color(0xFF2B2B2B),
-                size: 24,
+                color: AppPalette.textPrimary,
+                size: 16,
               ),
-              SizedBox(width: 8),
+              SizedBox(width: 5),
               Text(
                 'Filters',
                 style: TextStyle(
-                  color: Color(0xFF252321),
-                  fontSize: 15.0,
+                  color: AppPalette.textPrimary,
+                  fontSize: 12.2,
                   fontWeight: FontWeight.w600,
+                  height: 1.0,
                 ),
               ),
-              SizedBox(width: 8),
+              SizedBox(width: 6),
               DecoratedBox(
                 decoration: BoxDecoration(
-                  color: Color(0xFFFF8B06),
+                  color: AppPalette.primary,
                   shape: BoxShape.circle,
                 ),
-                child: SizedBox(width: 8, height: 8),
+                child: SizedBox(width: 7, height: 7),
               ),
             ],
           ),
@@ -660,34 +674,37 @@ class _CommunityCategoryChip extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
         child: Container(
-          height: 54,
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: selected
-                ? const Color(0xFFFF8A0A)
-                : Colors.white.withOpacity(0.97),
-            borderRadius: BorderRadius.circular(20),
+                ? AppPalette.primary
+                : AppPalette.surface.withValues(alpha: 0.97),
+            borderRadius: BorderRadius.circular(18),
             border: selected
-                ? Border.all(color: Colors.white, width: 2.6)
-                : Border.all(color: Colors.white.withOpacity(0.44)),
+                ? Border.all(color: AppPalette.surface, width: 1.8)
+                : Border.all(color: AppPalette.border),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 data.icon,
-                size: 22,
-                color: selected ? Colors.white : const Color(0xFF2C2A28),
+                size: 16,
+                color: selected ? AppPalette.surface : AppPalette.textPrimary,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 6),
               Text(
                 data.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: selected ? Colors.white : const Color(0xFF2C2A28),
-                  fontSize: 15,
+                  color: selected ? AppPalette.surface : AppPalette.textPrimary,
+                  fontSize: 12.2,
                   fontWeight: FontWeight.w600,
+                  height: 1.0,
                 ),
               ),
             ],
@@ -706,15 +723,15 @@ class _CommunityPostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.985),
-        borderRadius: BorderRadius.circular(28),
+        color: AppPalette.surface.withValues(alpha: 0.985),
+        borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7A3F00).withOpacity(0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: AppPalette.shadow.withValues(alpha: 0.08),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -738,16 +755,17 @@ class _CommunityPostCard extends StatelessWidget {
                         Text(
                           data.authorName,
                           style: const TextStyle(
-                            color: Color(0xFF23212A),
-                            fontSize: 16.2,
+                            color: AppPalette.textStrong,
+                            fontSize: 14.8,
                             fontWeight: FontWeight.w800,
+                            height: 1.05,
                           ),
                         ),
                         if (data.verified)
                           const Icon(
                             Icons.verified_rounded,
-                            color: Color(0xFF2E8EFF),
-                            size: 18,
+                            color: AppPalette.primary,
+                            size: 16,
                           ),
                         if (data.accentBadge != null)
                           Container(
@@ -756,15 +774,16 @@ class _CommunityPostCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFFF0E2),
+                              color: AppPalette.primarySoft,
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
                               data.accentBadge!,
                               style: const TextStyle(
-                                color: Color(0xFFF18118),
-                                fontSize: 11.8,
+                                color: AppPalette.primaryDark,
+                                fontSize: 10.8,
                                 fontWeight: FontWeight.w700,
+                                height: 1.0,
                               ),
                             ),
                           ),
@@ -776,9 +795,10 @@ class _CommunityPostCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Color(0xFF69646A),
-                        fontSize: 13.2,
+                        color: AppPalette.textSecondary,
+                        fontSize: 11.8,
                         fontWeight: FontWeight.w500,
+                        height: 1.1,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -787,16 +807,17 @@ class _CommunityPostCard extends StatelessWidget {
                         Text(
                           data.timeLabel,
                           style: const TextStyle(
-                            color: Color(0xFF6F6A71),
-                            fontSize: 12.6,
+                            color: AppPalette.textSecondary,
+                            fontSize: 11.6,
                             fontWeight: FontWeight.w500,
+                            height: 1.0,
                           ),
                         ),
                         const SizedBox(width: 6),
                         const Icon(
                           Icons.public_rounded,
-                          color: Color(0xFF706A72),
-                          size: 15,
+                          color: AppPalette.textMuted,
+                          size: 13,
                         ),
                       ],
                     ),
@@ -807,35 +828,35 @@ class _CommunityPostCard extends StatelessWidget {
                 onPressed: () {},
                 icon: const Icon(
                   Icons.more_vert_rounded,
-                  color: Color(0xFF5B5755),
+                  color: AppPalette.textSecondary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Text(
             data.title,
             style: const TextStyle(
-              color: Color(0xFF1F1D27),
-              fontSize: 19,
+              color: AppPalette.textPrimary,
+              fontSize: 15.6,
               fontWeight: FontWeight.w800,
-              height: 1.08,
+              height: 1.12,
               letterSpacing: -0.25,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Text(
             data.body,
             style: const TextStyle(
-              color: Color(0xFF3C3947),
-              fontSize: 14.4,
+              color: AppPalette.textSecondary,
+              fontSize: 12.6,
               fontWeight: FontWeight.w500,
               height: 1.36,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: data.tagBackground,
               borderRadius: BorderRadius.circular(999),
@@ -844,8 +865,9 @@ class _CommunityPostCard extends StatelessWidget {
               data.tag,
               style: TextStyle(
                 color: data.tagForeground,
-                fontSize: 12.4,
+                fontSize: 11.0,
                 fontWeight: FontWeight.w700,
+                height: 1.0,
               ),
             ),
           ),
@@ -867,8 +889,8 @@ class _CommunityPostCard extends StatelessWidget {
                   Text(
                     data.reactionCount,
                     style: const TextStyle(
-                      color: Color(0xFF4A4651),
-                      fontSize: 13.6,
+                      color: AppPalette.textSecondary,
+                      fontSize: 12.0,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -877,16 +899,16 @@ class _CommunityPostCard extends StatelessWidget {
               Text(
                 data.comments,
                 style: const TextStyle(
-                  color: Color(0xFF5A5661),
-                  fontSize: 13.4,
+                  color: AppPalette.textSecondary,
+                  fontSize: 12.0,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
                 data.shares,
                 style: const TextStyle(
-                  color: Color(0xFF5A5661),
-                  fontSize: 13.4,
+                  color: AppPalette.textSecondary,
+                  fontSize: 12.0,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -895,7 +917,7 @@ class _CommunityPostCard extends StatelessWidget {
           const SizedBox(height: 12),
           Divider(
             height: 1,
-            color: const Color(0xFFEAE3D9).withOpacity(0.8),
+            color: AppPalette.divider.withValues(alpha: 0.8),
           ),
           const SizedBox(height: 10),
           const Row(
@@ -931,26 +953,27 @@ class _ReactionCluster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       width: 70,
       height: 26,
       child: Stack(
         clipBehavior: Clip.none,
-        children: const [
+        children: [
           _ReactionBubble(
             left: 0,
-            background: Color(0xFF2E8EFF),
-            child:
-                Icon(Icons.thumb_up_alt_rounded, color: Colors.white, size: 15),
+            background: AppPalette.primary,
+            child: Icon(Icons.thumb_up_alt_rounded,
+                color: AppPalette.surface, size: 15),
           ),
           _ReactionBubble(
             left: 20,
-            background: Color(0xFFFF5E5E),
-            child: Icon(Icons.favorite_rounded, color: Colors.white, size: 15),
+            background: AppPalette.primaryDark,
+            child: Icon(Icons.favorite_rounded,
+                color: AppPalette.surface, size: 15),
           ),
           _ReactionBubble(
             left: 40,
-            background: Color(0xFFFFD449),
+            background: AppPalette.primaryBorder,
             child: Text(
               '😮',
               style: TextStyle(fontSize: 15),
@@ -983,7 +1006,7 @@ class _ReactionBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: background,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white, width: 2),
+          border: Border.all(color: AppPalette.surface, width: 2),
         ),
         child: Center(child: child),
       ),
@@ -1010,16 +1033,17 @@ class _PostAction extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: const Color(0xFF605A63),
-            size: 28,
+            color: AppPalette.textSecondary,
+            size: 20,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 5),
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF5F5962),
-              fontSize: 13.4,
+              color: AppPalette.textSecondary,
+              fontSize: 12.2,
               fontWeight: FontWeight.w500,
+              height: 1.0,
             ),
           ),
         ],
@@ -1042,8 +1066,8 @@ class _CommunityTravelBanner extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF8DCCFF),
-              Color(0xFFE4F3FF),
+              AppPalette.primarySoft,
+              AppPalette.surfaceSoft,
             ],
           ),
         ),
@@ -1056,7 +1080,7 @@ class _CommunityTravelBanner extends StatelessWidget {
                 width: 18,
                 height: 18,
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppPalette.surface,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -1066,7 +1090,7 @@ class _CommunityTravelBanner extends StatelessWidget {
               right: 26,
               child: Icon(
                 Icons.flight_rounded,
-                color: Colors.white.withOpacity(0.94),
+                color: AppPalette.surface.withValues(alpha: 0.94),
                 size: 30,
               ),
             ),
@@ -1077,13 +1101,13 @@ class _CommunityTravelBanner extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _LandmarkBlock(
+                  const _LandmarkBlock(
                     width: 54,
                     height: 120,
-                    color: const Color(0xFF4A7CB0),
-                    child: const Icon(
+                    color: AppPalette.primary,
+                    child: Icon(
                       Icons.account_balance_rounded,
-                      color: Color(0xFFEFD16C),
+                      color: AppPalette.surfaceSoft,
                       size: 24,
                     ),
                   ),
@@ -1140,7 +1164,7 @@ class _ClockTower extends StatelessWidget {
           width: 40,
           height: 104,
           decoration: const BoxDecoration(
-            color: Color(0xFFB28744),
+            color: AppPalette.primaryDark,
             borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
           ),
           child: Column(
@@ -1150,7 +1174,7 @@ class _ClockTower extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFF9EBC7),
+                  color: AppPalette.surfaceTint,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -1165,7 +1189,7 @@ class _ClockTower extends StatelessWidget {
 class _OperaHouse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       width: 88,
       height: 70,
       child: Stack(
@@ -1207,7 +1231,7 @@ class _Sail extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        color: const Color(0xFFEFEAE4),
+        color: AppPalette.border,
       ),
     );
   }
@@ -1243,7 +1267,7 @@ class _NeedleTower extends StatelessWidget {
           width: 10,
           height: 116,
           decoration: BoxDecoration(
-            color: const Color(0xFF746C73),
+            color: AppPalette.textMuted,
             borderRadius: BorderRadius.circular(999),
           ),
         ),
@@ -1251,7 +1275,7 @@ class _NeedleTower extends StatelessWidget {
           width: 40,
           height: 10,
           decoration: BoxDecoration(
-            color: const Color(0xFF746C73),
+            color: AppPalette.textMuted,
             borderRadius: BorderRadius.circular(999),
           ),
         ),
@@ -1272,21 +1296,21 @@ class _CommunityAvatar extends StatelessWidget {
       height: 54,
       child: switch (kind) {
         _CommunityAvatarKind.rohan => const _IllustratedAvatar(
-            hairColor: Color(0xFF2D211E),
-            shirtColor: Color(0xFFF2A126),
-            background1: Color(0xFFE4D7CC),
-            background2: Color(0xFFC5B08F),
+            hairColor: AppPalette.textPrimary,
+            shirtColor: AppPalette.primary,
+            background1: AppPalette.primarySoft,
+            background2: AppPalette.primaryBorder,
           ),
         _CommunityAvatarKind.anika => const _IllustratedAvatar(
-            hairColor: Color(0xFF4D342B),
-            shirtColor: Color(0xFFDBC8A7),
-            background1: Color(0xFFF0E4D9),
-            background2: Color(0xFFC9B18E),
+            hairColor: AppPalette.textSecondary,
+            shirtColor: AppPalette.surfaceTint,
+            background1: AppPalette.surfaceSoft,
+            background2: AppPalette.primaryBorder,
             feminine: true,
           ),
         _CommunityAvatarKind.official => ClipOval(
             child: Container(
-              color: const Color(0xFFFFF0CB),
+              color: AppPalette.primarySoft,
               padding: const EdgeInsets.all(5),
               child: Image.asset(
                 'assets/icon/community_fox.png',
@@ -1346,7 +1370,7 @@ class _IllustratedAvatar extends StatelessWidget {
             child: Container(
               height: 22,
               decoration: const BoxDecoration(
-                color: Color(0xFFF3C39D),
+                color: AppPalette.surfaceTint,
                 shape: BoxShape.circle,
               ),
             ),

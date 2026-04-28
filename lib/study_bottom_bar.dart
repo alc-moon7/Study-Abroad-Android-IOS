@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'app_theme.dart';
+
 enum StudyBottomTab {
   home,
   universities,
-  shortlist,
+  application,
   community,
   profile,
 }
@@ -49,8 +51,16 @@ class StudyBottomBar extends StatelessWidget {
       height: 78,
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF8B4300).withOpacity(0.94),
+        color: AppPalette.surface,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppPalette.border),
+        boxShadow: [
+          BoxShadow(
+            color: AppPalette.shadow.withValues(alpha: 0.08),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -73,11 +83,11 @@ class StudyBottomBar extends StatelessWidget {
           ),
           Expanded(
             child: _StudyBottomBarItem(
-              icon: Icons.favorite_border_rounded,
-              label: 'Shortlist',
+              icon: Icons.assignment_rounded,
+              label: 'Application',
               badgeText: '3',
-              active: activeTab == StudyBottomTab.shortlist,
-              onTap: () => onTabSelected(StudyBottomTab.shortlist),
+              active: activeTab == StudyBottomTab.application,
+              onTap: () => onTabSelected(StudyBottomTab.application),
             ),
           ),
           Expanded(
@@ -119,10 +129,8 @@ class _StudyBottomBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor =
-        active ? const Color(0xFFFFD27A) : Colors.white.withOpacity(0.86);
-    final textColor =
-        active ? const Color(0xFFFFE3A5) : Colors.white.withOpacity(0.88);
+    final iconColor = active ? AppPalette.primary : AppPalette.textMuted;
+    final textColor = active ? AppPalette.primaryDark : AppPalette.textMuted;
 
     return Material(
       color: Colors.transparent,
@@ -150,10 +158,10 @@ class _StudyBottomBarItem extends StatelessWidget {
                         width: 19,
                         height: 19,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFF8B06),
+                          color: AppPalette.primary,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.white,
+                            color: AppPalette.surface,
                             width: 2,
                           ),
                         ),
@@ -161,7 +169,7 @@ class _StudyBottomBarItem extends StatelessWidget {
                           child: Text(
                             badgeText!,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppPalette.surface,
                               fontSize: 9.2,
                               fontWeight: FontWeight.w700,
                               height: 1.0,

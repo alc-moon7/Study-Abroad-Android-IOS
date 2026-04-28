@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app_theme.dart';
 import 'assistant_intro_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -104,8 +105,8 @@ class _SplashScreenState extends State<SplashScreen>
               begin: Alignment(-0.95, -1.0),
               end: Alignment(1.0, 1.0),
               colors: [
-                Color(0xFFFF9634),
-                Color(0xFFFFC92E),
+                AppPalette.background,
+                AppPalette.surfaceSoft,
               ],
             ),
           ),
@@ -118,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen>
                     center: Alignment(0.0, -0.1),
                     radius: 1.0,
                     colors: [
-                      Color(0x22FFFFFF),
+                      Color(0x22E8665D),
                       Color(0x00FFFFFF),
                     ],
                   ),
@@ -160,7 +161,7 @@ class _SplashScreenState extends State<SplashScreen>
                               fontSize: titleSize,
                               fontWeight: FontWeight.w800,
                               height: 0.98,
-                              color: Colors.white,
+                              color: AppPalette.textPrimary,
                               letterSpacing: -0.6,
                             ),
                           ),
@@ -173,7 +174,8 @@ class _SplashScreenState extends State<SplashScreen>
                               style: TextStyle(
                                 fontSize: subtitleSize,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white.withOpacity(0.96),
+                                color: AppPalette.textSecondary
+                                    .withValues(alpha: 0.96),
                                 letterSpacing: -0.15,
                                 height: 1.2,
                               ),
@@ -244,7 +246,7 @@ class _AnimatedFox extends StatelessWidget {
                           borderRadius: BorderRadius.circular(size),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.14),
+                              color: AppPalette.shadow.withValues(alpha: 0.10),
                               blurRadius: size * 0.07,
                               spreadRadius: size * 0.01,
                             ),
