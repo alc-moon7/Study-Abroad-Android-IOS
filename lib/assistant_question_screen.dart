@@ -194,7 +194,7 @@ class _AssistantQuestionScreenState extends State<AssistantQuestionScreen>
                     center: Alignment(0.05, -0.05),
                     radius: 1.08,
                     colors: [
-                      Color(0x28E8665D),
+                      Color(0x12000000),
                       Color(0x00FFFFFF),
                     ],
                   ),

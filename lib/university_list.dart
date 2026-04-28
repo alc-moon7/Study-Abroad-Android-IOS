@@ -260,7 +260,7 @@ class _UniversityBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    Color(0x20E8665D),
+                    Color(0x10000000),
                     Color(0x00FFFFFF),
                   ],
                 ),
