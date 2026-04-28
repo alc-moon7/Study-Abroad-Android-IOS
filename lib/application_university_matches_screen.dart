@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app_theme.dart';
+import 'application_form_screen.dart';
 import 'community_page.dart';
 import 'study_bottom_bar.dart';
 
 class ApplicationUniversityMatchesScreen extends StatelessWidget {
-  const ApplicationUniversityMatchesScreen({super.key});
+  const ApplicationUniversityMatchesScreen({
+    super.key,
+    this.showBottomBar = true,
+    this.onTabSelected,
+  });
+
+  final bool showBottomBar;
+  final ValueChanged<StudyBottomTab>? onTabSelected;
 
   static const List<_UniversityMatchData> _matches = [
     _UniversityMatchData(
@@ -48,7 +56,39 @@ class ApplicationUniversityMatchesScreen extends StatelessWidget {
     ),
   ];
 
+  void _openApplicationForm(BuildContext context, _UniversityMatchData match) {
+    Navigator.of(context).push(
+      PageRouteBuilder<void>(
+        transitionDuration: const Duration(milliseconds: 280),
+        reverseTransitionDuration: const Duration(milliseconds: 220),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            ApplicationFormScreen(
+          universityName: match.name,
+          programName: match.program,
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final curved = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+          );
+          final offset = Tween<Offset>(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(curved);
+          return FadeTransition(
+            opacity: curved,
+            child: SlideTransition(position: offset, child: child),
+          );
+        },
+      ),
+    );
+  }
+
   void _onBottomTabSelected(BuildContext context, StudyBottomTab tab) {
+    if (onTabSelected != null) {
+      onTabSelected!(tab);
+      return;
+    }
     if (tab == StudyBottomTab.application) {
       return;
     }
@@ -85,22 +125,31 @@ class ApplicationUniversityMatchesScreen extends StatelessWidget {
                     ..._matches.map(
                       (match) => Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: _UniversityMatchCard(data: match),
+                        child: _UniversityMatchCard(
+                          data: match,
+                          onPrimaryPressed: match.primaryAction
+                                  .toLowerCase()
+                                  .contains('apply')
+                              ? () => _openApplicationForm(context, match)
+                              : null,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 4),
                     const Center(child: _NewSearchButton()),
                   ],
                 ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 10,
-                  child: StudyBottomBar(
-                    activeTab: StudyBottomTab.application,
-                    onTabSelected: (tab) => _onBottomTabSelected(context, tab),
+                if (showBottomBar)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 10,
+                    child: StudyBottomBar(
+                      activeTab: StudyBottomTab.application,
+                      onTabSelected: (tab) =>
+                          _onBottomTabSelected(context, tab),
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -271,9 +320,13 @@ class _SavePrompt extends StatelessWidget {
 }
 
 class _UniversityMatchCard extends StatelessWidget {
-  const _UniversityMatchCard({required this.data});
+  const _UniversityMatchCard({
+    required this.data,
+    this.onPrimaryPressed,
+  });
 
   final _UniversityMatchData data;
+  final VoidCallback? onPrimaryPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -360,7 +413,10 @@ class _UniversityMatchCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              _CardActions(primaryLabel: data.primaryAction),
+              _CardActions(
+                primaryLabel: data.primaryAction,
+                onPrimaryPressed: onPrimaryPressed,
+              ),
             ],
           ),
         );
@@ -593,9 +649,13 @@ class _TagWrap extends StatelessWidget {
 }
 
 class _CardActions extends StatelessWidget {
-  const _CardActions({required this.primaryLabel});
+  const _CardActions({
+    required this.primaryLabel,
+    this.onPrimaryPressed,
+  });
 
   final String primaryLabel;
+  final VoidCallback? onPrimaryPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -607,7 +667,10 @@ class _CardActions extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _PrimaryActionButton(label: primaryLabel),
+              _PrimaryActionButton(
+                label: primaryLabel,
+                onTap: onPrimaryPressed,
+              ),
               const SizedBox(height: 10),
               const Center(child: _ViewDetailsAction()),
             ],
@@ -620,7 +683,10 @@ class _CardActions extends StatelessWidget {
             const SizedBox(width: 14),
             SizedBox(
               width: constraints.maxWidth * 0.46,
-              child: _PrimaryActionButton(label: primaryLabel),
+              child: _PrimaryActionButton(
+                label: primaryLabel,
+                onTap: onPrimaryPressed,
+              ),
             ),
           ],
         );
@@ -660,16 +726,20 @@ class _ViewDetailsAction extends StatelessWidget {
 }
 
 class _PrimaryActionButton extends StatelessWidget {
-  const _PrimaryActionButton({required this.label});
+  const _PrimaryActionButton({
+    required this.label,
+    this.onTap,
+  });
 
   final String label;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

@@ -16,6 +16,8 @@ class UniversityListScreen extends StatefulWidget {
 class _UniversityListScreenState extends State<UniversityListScreen> {
   final TextEditingController _searchController = TextEditingController();
   final Set<String> _shortlistedIds = <String>{};
+  final PageController _pageController = PageController();
+  StudyBottomTab _activeTab = StudyBottomTab.universities;
 
   static const List<_UniversityData> _universities = [
     _UniversityData(
@@ -70,6 +72,7 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
 
   @override
   void dispose() {
+    _pageController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -85,20 +88,93 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
   }
 
   void _onBottomTabSelected(StudyBottomTab tab) {
-    if (tab == StudyBottomTab.universities) {
+    final pageIndex = _pageIndexForTab(tab);
+    if (pageIndex == null || tab == _activeTab) {
       return;
     }
-    if (tab == StudyBottomTab.application) {
-      Navigator.of(context).push(
-        buildBottomTabRoute(const ApplicationUniversityMatchesScreen()),
-      );
+
+    setState(() {
+      _activeTab = tab;
+    });
+
+    if (!_pageController.hasClients) {
       return;
     }
-    if (tab == StudyBottomTab.community) {
-      Navigator.of(context).push(
-        buildBottomTabRoute(const CommunityPage()),
-      );
+
+    _pageController.animateToPage(
+      pageIndex,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  int? _pageIndexForTab(StudyBottomTab tab) {
+    return switch (tab) {
+      StudyBottomTab.universities => 0,
+      StudyBottomTab.application => 1,
+      StudyBottomTab.community => 2,
+      StudyBottomTab.home || StudyBottomTab.profile => null,
+    };
+  }
+
+  StudyBottomTab _tabForPageIndex(int index) {
+    return switch (index) {
+      1 => StudyBottomTab.application,
+      2 => StudyBottomTab.community,
+      _ => StudyBottomTab.universities,
+    };
+  }
+
+  void _handlePageChanged(int index) {
+    final tab = _tabForPageIndex(index);
+    if (tab == _activeTab) {
+      return;
     }
+    setState(() {
+      _activeTab = tab;
+    });
+  }
+
+  void _goToUniversitiesTab() {
+    _onBottomTabSelected(StudyBottomTab.universities);
+  }
+
+  Widget _buildFixedBottomBar() {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 10),
+          child: StudyBottomBar(
+            activeTab: _activeTab,
+            onTabSelected: _onBottomTabSelected,
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildTabPages() {
+    return [
+      _UniversityListTabContent(
+        searchController: _searchController,
+        universities: _universities,
+        shortlistedIds: _shortlistedIds,
+        onShortlistToggle: _toggleShortlist,
+      ),
+      ApplicationUniversityMatchesScreen(
+        showBottomBar: false,
+        onTabSelected: _onBottomTabSelected,
+      ),
+      CommunityPage(
+        showBottomBar: false,
+        onTabSelected: _onBottomTabSelected,
+        onBack: _goToUniversitiesTab,
+      ),
+    ];
   }
 
   @override
@@ -109,97 +185,120 @@ class _UniversityListScreenState extends State<UniversityListScreen> {
         systemNavigationBarColor: Colors.transparent,
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: AppPalette.background,
-        body: DecoratedBox(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment(-0.92, -1.0),
-              end: Alignment(1.0, 1.0),
-              colors: [
-                AppPalette.background,
-                AppPalette.surfaceSoft,
-                AppPalette.primarySoft,
-              ],
-              stops: [0.0, 0.68, 1.0],
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: _handlePageChanged,
+                children: _buildTabPages(),
+              ),
             ),
-          ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              const _UniversityBackground(),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 10,
-                        left: 0,
-                        right: 0,
-                        child: SizedBox(
-                          height: 212,
-                          child: Stack(
-                            children: [
-                              const _HeroSection(),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 60,
-                                child: _SearchField(
-                                  controller: _searchController,
-                                ),
-                              ),
-                            ],
+            _buildFixedBottomBar(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UniversityListTabContent extends StatelessWidget {
+  const _UniversityListTabContent({
+    required this.searchController,
+    required this.universities,
+    required this.shortlistedIds,
+    required this.onShortlistToggle,
+  });
+
+  final TextEditingController searchController;
+  final List<_UniversityData> universities;
+  final Set<String> shortlistedIds;
+  final ValueChanged<String> onShortlistToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(-0.92, -1.0),
+          end: Alignment(1.0, 1.0),
+          colors: [
+            AppPalette.background,
+            AppPalette.surfaceSoft,
+            AppPalette.primarySoft,
+          ],
+          stops: [0.0, 0.68, 1.0],
+        ),
+      ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          const _UniversityBackground(),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 10,
+                    left: 0,
+                    right: 0,
+                    child: SizedBox(
+                      height: 212,
+                      child: Stack(
+                        children: [
+                          const _HeroSection(),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 60,
+                            child: _SearchField(
+                              controller: searchController,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Positioned(
+                    top: 170,
+                    left: 0,
+                    right: 0,
+                    child: _FilterRow(),
+                  ),
+                  Positioned(
+                    top: 224,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: ListView(
+                      padding: const EdgeInsets.only(bottom: 104),
+                      children: [
+                        ...universities.map(
+                          (university) => Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: _UniversityCard(
+                              data: university,
+                              shortlisted:
+                                  shortlistedIds.contains(university.id),
+                              onShortlistTap: () =>
+                                  onShortlistToggle(university.id),
+                            ),
                           ),
                         ),
-                      ),
-                      const Positioned(
-                        top: 170,
-                        left: 0,
-                        right: 0,
-                        child: _FilterRow(),
-                      ),
-                      Positioned(
-                        top: 224,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: ListView(
-                          padding: const EdgeInsets.only(bottom: 104),
-                          children: [
-                            ..._universities.map(
-                              (university) => Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: _UniversityCard(
-                                  data: university,
-                                  shortlisted:
-                                      _shortlistedIds.contains(university.id),
-                                  onShortlistTap: () =>
-                                      _toggleShortlist(university.id),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            const _AdviceCard(),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 10,
-                        child: StudyBottomBar(
-                          activeTab: StudyBottomTab.universities,
-                          onTabSelected: _onBottomTabSelected,
-                        ),
-                      ),
-                    ],
+                        const SizedBox(height: 6),
+                        const _AdviceCard(),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

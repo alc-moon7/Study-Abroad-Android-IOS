@@ -6,7 +6,16 @@ import 'application_university_matches_screen.dart';
 import 'study_bottom_bar.dart';
 
 class CommunityPage extends StatefulWidget {
-  const CommunityPage({super.key});
+  const CommunityPage({
+    super.key,
+    this.showBottomBar = true,
+    this.onTabSelected,
+    this.onBack,
+  });
+
+  final bool showBottomBar;
+  final ValueChanged<StudyBottomTab>? onTabSelected;
+  final VoidCallback? onBack;
 
   @override
   State<CommunityPage> createState() => _CommunityPageState();
@@ -94,6 +103,10 @@ class _CommunityPageState extends State<CommunityPage> {
   ];
 
   void _onBottomTabSelected(StudyBottomTab tab) {
+    if (widget.onTabSelected != null) {
+      widget.onTabSelected!(tab);
+      return;
+    }
     if (tab == StudyBottomTab.community) {
       return;
     }
@@ -109,6 +122,10 @@ class _CommunityPageState extends State<CommunityPage> {
   }
 
   void _goBack() {
+    if (widget.onBack != null) {
+      widget.onBack!();
+      return;
+    }
     Navigator.of(context).maybePop();
   }
 
@@ -242,15 +259,16 @@ class _CommunityPageState extends State<CommunityPage> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 10,
-                        child: StudyBottomBar(
-                          activeTab: StudyBottomTab.community,
-                          onTabSelected: _onBottomTabSelected,
+                      if (widget.showBottomBar)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 10,
+                          child: StudyBottomBar(
+                            activeTab: StudyBottomTab.community,
+                            onTabSelected: _onBottomTabSelected,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
